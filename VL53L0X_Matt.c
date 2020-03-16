@@ -1,5 +1,6 @@
 
-
+#include "tcaMulti.c"
+#inlcude "VL53L0X_Init"
 
 //        Original
 //
@@ -26,7 +27,7 @@
 //        Replacement:
 void performSingleRefCalibration(uint8_t vhv_init_byte)
 {
-  i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSRANGE_START, I2C_MEMADD_SIZE_8BIT, 0x01 | vhv_init_byte, 1, 100);
+  i2cStats = VL53L0X_Write_Value( SYSRANGE_START,  0x01 | vhv_init_byte);
   HAL_Delay(20);
 
   unsigned char tmp[2];
@@ -36,11 +37,9 @@ void performSingleRefCalibration(uint8_t vhv_init_byte)
     tmp[0] &= 0x07;
   } while (tmp[0] == 0);
   
-  i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_INTERRUPT_CLEAR, I2C_MEMADD_SIZE_8BIT, 0x01 | vhv_init_byte, 1, 100);
-  HAL_Delay(20);
+  i2cStats = VL53L0X_Write_Value( SYSTEM_INTERRUPT_CLEAR, 0x01 | vhv_init_byte);
 
-  i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSRANGE_START, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-  HAL_Delay(20);
+  i2cStats = VL53L0X_Write_Value( SYSRANGE_START, 0x00);
 }
 
 
@@ -82,36 +81,28 @@ uint16_t readRangeSingleMil (void)
 {
 
     //Write 1
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x80, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    HAL_Delay(20);
+    i2cStats = VL53L0X_Write_Value( 0x80, 0x01);
 
     //Write 2 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    HAL_Delay(20);
+    i2cStats = VL53L0X_Write_Value( 0xFF, 0x01);
     
     //Write 3
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x00, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    HAL_Delay(20);
+    i2cStats = VL53L0X_Write_Value( 0x00, 0x00);
 
     //Write 4
     i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x91, I2C_MEMADD_SIZE_8BIT, stop_variable, 1, 100);
-    HAL_Delay(20);
 
     //Write 5
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x00, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    HAL_Delay(20);
+    i2cStats = VL53L0X_Write_Value( 0x00, 0x01);
 
     //Write 6
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    HAL_Delay(20);
+    i2cStats = VL53L0X_Write_Value( 0xFF, 0x00);
 
     //Write 7
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x80, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    HAL_Delay(20);
+    i2cStats = VL53L0X_Write_Value( 0x80, 0x00);
 
     //Write 8
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSRANGE_START, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    HAL_Delay(20);
+    i2cStats = VL53L0X_Write_Value( SYSRANGE_START,  0x01);
 
     // "Wait until start bit has been cleared"
   unsigned char tmp[2];
@@ -166,9 +157,10 @@ uint16_t readRangeContinousMil(void)
   
   i2cStats = HAL_I2C_Mem_Read(&hi2c1, VL53L0X_DEV_ADD << 1, RESULT_RANGE_STATUS + 10, I2C_MEMADD_SIZE_8BIT, tmp, 2, 100);
 
-  uint16_t range = (range[0] << 8) | range[1];
+  uint16_t range = (tmp[0] << 8) | tmp[1];
 
-  i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_INTERRUPT_CLEAR, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
+  i2cStats = VL53L0X_Write_Value(SYSTEM_INTERRUPT_CLEAR, 0x01);
+  
 
   return range; 
 }
@@ -202,6 +194,5 @@ void setSignalRateLimit(float limit_Mcps)
 
   //Need to verify how HAL handles multiple bits
   
-  i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, I2C_MEMADD_SIZE_8BIT, limit_Mcps * (1 << 7), 2, 100);
-  HAL_Delay(20);
+  i2cStats = VL53L0X_Write_Value( FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT,  limit_Mcps * (1 << 7));
 }
