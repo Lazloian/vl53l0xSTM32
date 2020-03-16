@@ -25,7 +25,7 @@
 
 
 //        Replacement:
-void performSingleRefCalibration(uint8_t vhv_init_byte)
+int performSingleRefCalibration(uint8_t vhv_init_byte)
 {
   i2cStats = VL53L0X_Write_Value( SYSRANGE_START,  0x01 | vhv_init_byte);
   HAL_Delay(20);
@@ -40,6 +40,8 @@ void performSingleRefCalibration(uint8_t vhv_init_byte)
   i2cStats = VL53L0X_Write_Value( SYSTEM_INTERRUPT_CLEAR, 0x01 | vhv_init_byte);
 
   i2cStats = VL53L0X_Write_Value( SYSRANGE_START, 0x00);
+
+  return 1;
 }
 
 
@@ -112,7 +114,7 @@ uint16_t readRangeSingleMil (void)
     tmp[0] &= 0x01;
   } while (tmp[0] == 0);
 
-    return readRangeContinuousMil()
+    return readRangeContinousMil();
 }
 
 //      readRangeContinuousMillimeters()
@@ -147,7 +149,7 @@ uint16_t readRangeSingleMil (void)
 //
 uint16_t readRangeContinousMil(void)
 {
-  unsigned char tmp[2]
+  unsigned char tmp[2];
 
   do
   {
