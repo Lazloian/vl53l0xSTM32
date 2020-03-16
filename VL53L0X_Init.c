@@ -84,28 +84,28 @@ int VL53L0X_Init()
 
     // set sensor to 3.3v mode
     i2cStats = HAL_I2C_Mem_Read(&hi2c1, VL53L0X_DEV_ADD << 1, VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV, I2C_MEMADD_SIZE_8BIT, initData, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV, I2C_MEMADD_SIZE_8BIT, initData[0] | 0x01;, 1, 100);
+    i2cStats = VL53L0X_Write_Value(VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV, initData[0] | 0x01);
 
     // set I2C standard mode
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x88, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x80, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x00, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
+    i2cStats = VL53L0X_Write_Value(0x88, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x80, 0x01);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x00, 0x00);
 
     i2cStats = HAL_I2C_Mem_Read(&hi2c1, VL53L0X_DEV_ADD << 1, 0x91, I2C_MEMADD_SIZE_8BIT, stop_variable, 1, 100);
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x00, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x80, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
+    i2cStats = VL53L0X_Write_Value(0x00, 0x01);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x80, 0x00);
 
     // disable SIGNAL_RATE_MSRC (bit 1) and SIGNAL_RATE_PRE_RANGE (bit 4) limit checks (don't know what this does)
     i2cStats = HAL_I2C_Mem_Read(&hi2c1, VL53L0X_DEV_ADD << 1, MSRC_CONFIG_CONTROL, I2C_MEMADD_SIZE_8BIT, initData, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, MSRC_CONFIG_CONTROL, I2C_MEMADD_SIZE_8BIT, initData[0] | 0x12, 1, 100);
+    i2cStats = VL53L0X_Write_Value(MSRC_CONFIG_CONTROL, initData[0] | 0x12);
 
     // set final range signal rate limit to 0.25 MCPS (million counts per second) 
     // setSignalRateLimit(0.25); //! Do not know if this function is needed, default may be fine
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_SEQUENCE_CONFIG, I2C_MEMADD_SIZE_8BIT, 0xFF, 1, 100);
+    i2cStats = VL53L0X_Write_Value(SYSTEM_SEQUENCE_CONFIG, 0xFF);
 
     //* VL53L0X_DataInit() end
 
@@ -120,11 +120,11 @@ int VL53L0X_Init()
 
     //* VL53L0X_set_reference_spads() begin
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, DYNAMIC_SPAD_REF_EN_START_OFFSET, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, I2C_MEMADD_SIZE_8BIT, 0x2C, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, GLOBAL_CONFIG_REF_EN_START_SELECT, I2C_MEMADD_SIZE_8BIT, 0xB4, 1, 100);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(DYNAMIC_SPAD_REF_EN_START_OFFSET, 0x00);
+    i2cStats = VL53L0X_Write_Value(DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, 0x2C);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(GLOBAL_CONFIG_REF_EN_START_SELECT, 0xB4);
 
     first_spad_to_enable = spad_type_is_aperture ? 12 : 0; // 12 is the first aperture spad
     spads_enabled = 0;
@@ -148,98 +148,98 @@ int VL53L0X_Init()
     //* VL53L0X_load_tuning_settings() begin
     // settings from vl53l0x_tuning.h
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x00, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x09, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x10, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x11, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x24, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x25, I2C_MEMADD_SIZE_8BIT, 0xFF, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x75, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x4E, I2C_MEMADD_SIZE_8BIT, 0x2C, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x48, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x30, I2C_MEMADD_SIZE_8BIT, 0x20, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x30, I2C_MEMADD_SIZE_8BIT, 0x09, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x54, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x31, I2C_MEMADD_SIZE_8BIT, 0x04, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x32, I2C_MEMADD_SIZE_8BIT, 0x03, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x40, I2C_MEMADD_SIZE_8BIT, 0x83, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x46, I2C_MEMADD_SIZE_8BIT, 0x25, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x60, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x27, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x50, I2C_MEMADD_SIZE_8BIT, 0x06, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x51, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x52, I2C_MEMADD_SIZE_8BIT, 0x96, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x56, I2C_MEMADD_SIZE_8BIT, 0x08, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x57, I2C_MEMADD_SIZE_8BIT, 0x30, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x61, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x62, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x64, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x65, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x66, I2C_MEMADD_SIZE_8BIT, 0xA0, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x22, I2C_MEMADD_SIZE_8BIT, 0x32, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x47, I2C_MEMADD_SIZE_8BIT, 0x14, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x49, I2C_MEMADD_SIZE_8BIT, 0xFF, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x4A, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x7A, I2C_MEMADD_SIZE_8BIT, 0x0A, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x7B, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x78, I2C_MEMADD_SIZE_8BIT, 0x21, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x23, I2C_MEMADD_SIZE_8BIT, 0x34, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x42, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x44, I2C_MEMADD_SIZE_8BIT, 0xFF, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x45, I2C_MEMADD_SIZE_8BIT, 0x26, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x46, I2C_MEMADD_SIZE_8BIT, 0x05, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x40, I2C_MEMADD_SIZE_8BIT, 0x40, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x0E, I2C_MEMADD_SIZE_8BIT, 0x06, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x20, I2C_MEMADD_SIZE_8BIT, 0x1A, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x43, I2C_MEMADD_SIZE_8BIT, 0x40, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x34, I2C_MEMADD_SIZE_8BIT, 0x03, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x35, I2C_MEMADD_SIZE_8BIT, 0x44, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x31, I2C_MEMADD_SIZE_8BIT, 0x04, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x4B, I2C_MEMADD_SIZE_8BIT, 0x09, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x4C, I2C_MEMADD_SIZE_8BIT, 0x05, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x4D, I2C_MEMADD_SIZE_8BIT, 0x04, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x44, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x45, I2C_MEMADD_SIZE_8BIT, 0x20, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x47, I2C_MEMADD_SIZE_8BIT, 0x08, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x48, I2C_MEMADD_SIZE_8BIT, 0x28, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x67, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x70, I2C_MEMADD_SIZE_8BIT, 0x04, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x71, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x72, I2C_MEMADD_SIZE_8BIT, 0xFE, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x76, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x77, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x0D, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x80, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x01, I2C_MEMADD_SIZE_8BIT, 0xF8, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x8E, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x00, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0xFF, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x80, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x00, 0x00);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x09, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x10, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x11, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x24, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x25, 0xFF);
+    i2cStats = VL53L0X_Write_Value(0x75, 0x00);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x4E, 0x2C);
+    i2cStats = VL53L0X_Write_Value(0x48, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x30, 0x20);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x30, 0x09);
+    i2cStats = VL53L0X_Write_Value(0x54, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x31, 0x04);
+    i2cStats = VL53L0X_Write_Value(0x32, 0x03);
+    i2cStats = VL53L0X_Write_Value(0x40, 0x83);
+    i2cStats = VL53L0X_Write_Value(0x46, 0x25);
+    i2cStats = VL53L0X_Write_Value(0x60, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x27, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x50, 0x06);
+    i2cStats = VL53L0X_Write_Value(0x51, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x52, 0x96);
+    i2cStats = VL53L0X_Write_Value(0x56, 0x08);
+    i2cStats = VL53L0X_Write_Value(0x57, 0x30);
+    i2cStats = VL53L0X_Write_Value(0x61, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x62, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x64, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x65, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x66, 0xA0);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x22, 0x32);
+    i2cStats = VL53L0X_Write_Value(0x47, 0x14);
+    i2cStats = VL53L0X_Write_Value(0x49, 0xFF);
+    i2cStats = VL53L0X_Write_Value(0x4A, 0x00);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x7A, 0x0A);
+    i2cStats = VL53L0X_Write_Value(0x7B, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x78, 0x21);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x23, 0x34);
+    i2cStats = VL53L0X_Write_Value(0x42, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x44, 0xFF);
+    i2cStats = VL53L0X_Write_Value(0x45, 0x26);
+    i2cStats = VL53L0X_Write_Value(0x46, 0x05);
+    i2cStats = VL53L0X_Write_Value(0x40, 0x40);
+    i2cStats = VL53L0X_Write_Value(0x0E, 0x06);
+    i2cStats = VL53L0X_Write_Value(0x20, 0x1A);
+    i2cStats = VL53L0X_Write_Value(0x43, 0x40);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x34, 0x03);
+    i2cStats = VL53L0X_Write_Value(0x35, 0x44);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x31, 0x04);
+    i2cStats = VL53L0X_Write_Value(0x4B, 0x09);
+    i2cStats = VL53L0X_Write_Value(0x4C, 0x05);
+    i2cStats = VL53L0X_Write_Value(0x4D, 0x04);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x44, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x45, 0x20);
+    i2cStats = VL53L0X_Write_Value(0x47, 0x08);
+    i2cStats = VL53L0X_Write_Value(0x48, 0x28);
+    i2cStats = VL53L0X_Write_Value(0x67, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x70, 0x04);
+    i2cStats = VL53L0X_Write_Value(0x71, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x72, 0xFE);
+    i2cStats = VL53L0X_Write_Value(0x76, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x77, 0x00);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x0D, 0x01);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x80, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x01, 0xF8);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x8E, 0x01);
+    i2cStats = VL53L0X_Write_Value(0x00, 0x01);
+    i2cStats = VL53L0X_Write_Value(0xFF, 0x00);
+    i2cStats = VL53L0X_Write_Value(0x80, 0x00);
 
     //* VL53L0X_load_tuning_settings() end
 
     // "Set interrupt config to new sample ready"
     //* VL53L0X_SetGpioConfig() begin
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_INTERRUPT_CONFIG_GPIO, I2C_MEMADD_SIZE_8BIT, 0x04, 1, 100);
+    i2cStats = VL53L0X_Write_Value(SYSTEM_INTERRUPT_CONFIG_GPIO, 0x04);
 
     i2cStats = HAL_I2C_Mem_Read(&hi2c1, VL53L0X_DEV_ADD << 1, GPIO_HV_MUX_ACTIVE_HIGH, I2C_MEMADD_SIZE_8BIT, initData, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, GPIO_HV_MUX_ACTIVE_HIGH, I2C_MEMADD_SIZE_8BIT, initData[0] & ~0x10, 1, 100); // active low
+    i2cStats = VL53L0X_Write_Value(GPIO_HV_MUX_ACTIVE_HIGH, initData[0] & ~0x10); // active low
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_INTERRUPT_CLEAR, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
+    i2cStats = VL53L0X_Write_Value(SYSTEM_INTERRUPT_CLEAR, 0x01);
 
     //* VL53L0X_SetGpioConfig() end
 
@@ -248,7 +248,7 @@ int VL53L0X_Init()
     // "Disable MSRC and TCC by default"
     //* VL53L0X_SetSequenceStepEnable() begin
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_SEQUENCE_CONFIG, I2C_MEMADD_SIZE_8BIT, 0xE8, 1, 100);
+    i2cStats = VL53L0X_Write_Value(SYSTEM_SEQUENCE_CONFIG, 0xE8);
 
     //* VL53L0X_SetSequenceStepEnable() end
 
@@ -260,7 +260,7 @@ int VL53L0X_Init()
 
     //* VL53L0X_perform_vhv_calibration() begin
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_SEQUENCE_CONFIG, I2C_MEMADD_SIZE_8BIT, 0x01, 1, 100);
+    i2cStats = VL53L0X_Write_Value(SYSTEM_SEQUENCE_CONFIG, 0x01);
 
     if (!performSingleRefCalibration(0x40))
     {
@@ -271,7 +271,7 @@ int VL53L0X_Init()
 
     //* VL53L0X_perform_phase_calibration() begin
 
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_SEQUENCE_CONFIG, I2C_MEMADD_SIZE_8BIT, 0x02, 1, 100);
+    i2cStats = VL53L0X_Write_Value(SYSTEM_SEQUENCE_CONFIG, 0x02);
 
     if (!performSingleRefCalibration(0x00))
     {
@@ -281,7 +281,7 @@ int VL53L0X_Init()
     //* VL53L0X_perform_phase_calibration() end
 
     // "restore the previous Sequence Config"
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, SYSTEM_SEQUENCE_CONFIG, I2C_MEMADD_SIZE_8BIT, 0xE8, 1, 100);
+    i2cStats = VL53L0X_Write_Value(SYSTEM_SEQUENCE_CONFIG, 0xE8);
 
     //* VL53L0X_PerformRefCalibration() end
 
