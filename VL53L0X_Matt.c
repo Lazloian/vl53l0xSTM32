@@ -177,21 +177,21 @@ uint16_t readRangeContinousMil(void)
 
 //    Original
 //
-// Set the return signal rate limit check value in units of MCPS (mega counts
-// per second). "This represents the amplitude of the signal reflected from the
-// target and detected by the device"; setting this limit presumably determines
-// the minimum measurement necessary for the sensor to report a valid reading.
-// Setting a lower limit increases the potential range of the sensor but also
-// seems to increase the likelihood of getting an inaccurate reading because of
-// unwanted reflections from objects other than the intended target.
-// Defaults to 0.25 MCPS as initialized by the ST API and this library.
-bool VL53L0X::setSignalRateLimit(float limit_Mcps)
-{
-  if (limit_Mcps < 0 || limit_Mcps > 511.99) { return false; }
+// // Set the return signal rate limit check value in units of MCPS (mega counts
+// // per second). "This represents the amplitude of the signal reflected from the
+// // target and detected by the device"; setting this limit presumably determines
+// // the minimum measurement necessary for the sensor to report a valid reading.
+// // Setting a lower limit increases the potential range of the sensor but also
+// // seems to increase the likelihood of getting an inaccurate reading because of
+// // unwanted reflections from objects other than the intended target.
+// // Defaults to 0.25 MCPS as initialized by the ST API and this library.
+// bool VL53L0X::setSignalRateLimit(float limit_Mcps)
+// {
+//   if (limit_Mcps < 0 || limit_Mcps > 511.99) { return false; }
 
-  // Q9.7 fixed point format (9 integer bits, 7 fractional bits)
-  writeReg16Bit(FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, limit_Mcps * (1 << 7));
-  return true;
+//   // Q9.7 fixed point format (9 integer bits, 7 fractional bits)
+//   writeReg16Bit(FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, limit_Mcps * (1 << 7));
+//   return true;
 }
 
 //    Replacement
@@ -201,6 +201,7 @@ void setSignalRateLimit(float limit_Mcps)
   //Error checking not added.  Make sure limit_Mcps is between 0 and 511.99
 
   //Need to verify how HAL handles multiple bits
+  
   i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, I2C_MEMADD_SIZE_8BIT, limit_Mcps * (1 << 7), 2, 100);
   HAL_Delay(20);
 }
