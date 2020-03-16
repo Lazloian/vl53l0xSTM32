@@ -77,7 +77,7 @@ int VL53L0X_Init()
 
     if (initData[0] != 0xEE)
     {
-        return false;
+        return 0;
     }
 
     //* VL53L0X_DataInit() begin
@@ -113,7 +113,7 @@ int VL53L0X_Init()
 
     if (!getSpadInfo(&spad_count, &spad_type_is_aperture)) // I do not know what this does
     {
-        return false;
+        return 0;
     }
 
     i2cStats = HAL_I2C_Mem_Read(&hi2c1, VL53L0X_DEV_ADD << 1, GLOBAL_CONFIG_SPAD_ENABLES_REF_0, I2C_MEMADD_SIZE_8BIT, ref_spad_map, 6, 100);
@@ -264,7 +264,7 @@ int VL53L0X_Init()
 
     if (!performSingleRefCalibration(0x40))
     {
-        return false;
+        return 0;
     }
 
     //* VL53L0X_perform_vhv_calibration() end
@@ -275,7 +275,7 @@ int VL53L0X_Init()
 
     if (!performSingleRefCalibration(0x00))
     {
-        return false;
+        return 0;
     }
 
     //* VL53L0X_perform_phase_calibration() end
@@ -285,5 +285,5 @@ int VL53L0X_Init()
 
     //* VL53L0X_PerformRefCalibration() end
 
-    return true;
+    return 1;
 }
