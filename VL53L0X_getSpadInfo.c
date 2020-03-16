@@ -1,6 +1,6 @@
 #define VL53L0X_DEV_ADD 0x29
 
-getSpadInfo(uint8_t* count, uint8_t* type_is_aperture)
+int getSpadInfo(uint8_t* count, uint8_t* type_is_aperture)
 {
     unsigned char tmp[1]; // holds data from register
     HAL_StatusTypeDef i2cStats;
