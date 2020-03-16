@@ -84,7 +84,7 @@ int VL53L0X_Init()
 
     // set sensor to 3.3v mode
     i2cStats = HAL_I2C_Mem_Read(&hi2c1, VL53L0X_DEV_ADD << 1, VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV, I2C_MEMADD_SIZE_8BIT, initData, 1, 100);
-    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV, I2C_MEMADD_SIZE_8BIT, initData[0] | 0x01, 1, 100);
+    i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV, I2C_MEMADD_SIZE_8BIT, initData[0] | 0x01;, 1, 100);
 
     // set I2C standard mode
     i2cStats = HAL_I2C_Mem_Write(&hi2c1, VL53L0X_DEV_ADD << 1, 0x88, I2C_MEMADD_SIZE_8BIT, 0x00, 1, 100);

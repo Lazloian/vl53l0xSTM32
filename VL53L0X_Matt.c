@@ -3,7 +3,7 @@
 
 //        Original
 //
-// // based on VL53L0X_perform_single_ref_calibration()
+//  based on VL53L0X_perform_single_ref_calibration()
 // bool VL53L0X::performSingleRefCalibration(uint8_t vhv_init_byte)
 // {
 //   writeReg(SYSRANGE_START, 0x01 | vhv_init_byte); // VL53L0X_REG_SYSRANGE_MODE_START_STOP
